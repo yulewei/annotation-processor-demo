@@ -1,2 +1,4 @@
 
-JSR-199 Java编译器API和JSR-269注解处理器API试验代码
+JSR-199 Java 编译器 API 和 JSR-269 注解处理器 API 试验代码
+
+参见博客：<http://nullwy.me/2017/04/javac-api/>
