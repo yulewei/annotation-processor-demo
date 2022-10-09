@@ -64,6 +64,7 @@ public class DemoProcessor extends AbstractProcessor {
             TypeElement classElement = (TypeElement) element;
             JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) trees.getTree(classElement);
             log.debug("@Data, process class: {}", classDecl.getSimpleName().toString());
+            // 代码生成
             handleData(classDecl);
         }
 
@@ -76,7 +77,7 @@ public class DemoProcessor extends AbstractProcessor {
             TypeElement classElement = (TypeElement) element;
             JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) trees.getTree(classElement);
             log.debug("@Slf4j, process class: {}", classDecl.getSimpleName().toString());
-            // @Slf4j 注解，代码生成
+            // 代码生成
             handleSlf4jLog(classDecl);
         }
         return true;
