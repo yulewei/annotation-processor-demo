@@ -4,7 +4,7 @@ package com.example;
  * @author yulewei
  */
 @Slf4j
-public class ProcessorMain {
+public class MyLombokMain {
 
     public static void main(String[] args) {
         Person person = new Person();

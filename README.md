@@ -21,7 +21,7 @@ mvn exec:java -pl javac-demo -Dexec.mainClass="Hello2"
 运行注解处理器示例代码：
 
 ``` bash
-mvn exec:java -pl processor-demo -Dexec.mainClass="com.example.ProcessorMain"
+mvn exec:java -pl processor-demo -Dexec.mainClass="com.example.MyLombokMain"
 mvn exec:java -pl processor-demo -Dexec.mainClass="com.example.CompilerMain"
 ```
 
