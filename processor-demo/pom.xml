@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.example</groupId>
-            <artifactId>processor</artifactId>
+            <artifactId>mylombok</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

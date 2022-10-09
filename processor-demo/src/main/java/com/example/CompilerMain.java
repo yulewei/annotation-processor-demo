@@ -29,7 +29,7 @@ public class CompilerMain {
         Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(file1));
 
         JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics,
-                Arrays.asList("-verbose", "-cp", "processor/target/processor-0.0.1-SNAPSHOT.jar",
+                Arrays.asList("-verbose", "-cp", "mylombok/target/mylombok-0.0.1-SNAPSHOT.jar",
                         "-d", "processor-demo/target/classes"), null, compilationUnits);
         task.setProcessors(Arrays.asList(processor));
         task.call();

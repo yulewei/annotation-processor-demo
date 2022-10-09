@@ -13,7 +13,7 @@
 
     <modules>
         <module>javac-demo</module>
-        <module>processor</module>
+        <module>mylombok</module>
         <module>processor-demo</module>
     </modules>
 
