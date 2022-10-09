@@ -1,6 +1,6 @@
 package com.example;
 
-import com.example.processor.DemoProcessor;
+import com.example.processor.MyLombokProcessor;
 import com.sun.tools.javac.api.JavacTool;
 
 import javax.tools.Diagnostic;
@@ -20,7 +20,7 @@ public class CompilerMain {
     public static void main(String[] args) throws IOException {
         JavaCompiler compiler = JavacTool.create();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
-        DemoProcessor processor = new DemoProcessor();
+        MyLombokProcessor processor = new MyLombokProcessor();
 
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
 

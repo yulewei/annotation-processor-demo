@@ -32,8 +32,8 @@ import java.util.Set;
 @AutoService(Processor.class)
 @SupportedAnnotationTypes("*")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-public class DemoProcessor extends AbstractProcessor {
-    private static final Logger log = LoggerFactory.getLogger(DemoProcessor.class);
+public class MyLombokProcessor extends AbstractProcessor {
+    private static final Logger log = LoggerFactory.getLogger(MyLombokProcessor.class);
 
     private JavacProcessingEnvironment env;
     private Trees trees;
