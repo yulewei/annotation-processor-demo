@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%highlight(%p)][%t][%cyan(%logger)]: %m%n</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="CONSOLE-ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>512</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

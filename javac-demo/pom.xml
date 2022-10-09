@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>processor</artifactId>
+    <artifactId>javac-demo</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -16,15 +16,5 @@
             <groupId>org.kohsuke.sorcerer</groupId>
             <artifactId>sorcerer-javac</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
     </dependencies>
-
 </project>
