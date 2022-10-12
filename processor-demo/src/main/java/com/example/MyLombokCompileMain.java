@@ -15,7 +15,7 @@ import java.util.Arrays;
 /**
  * @author yulewei
  */
-public class CompilerMain {
+public class MyLombokCompileMain {
 
     public static void main(String[] args) throws IOException {
         JavaCompiler compiler = JavacTool.create();
@@ -24,9 +24,8 @@ public class CompilerMain {
 
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
 
-        File file1 = new File("processor-demo/src/main/java/com/example/Person.java");
-        File file2 = new File("processor-demo/src/main/java/com/example/ProcessorMain.java");
-        Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(file1));
+        File file = new File("processor-demo/src/main/java/com/example/Person.java");
+        Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(file));
 
         JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics,
                 Arrays.asList("-verbose", "-cp", "mylombok/target/mylombok-0.0.1-SNAPSHOT.jar",

@@ -16,5 +16,12 @@
             <groupId>org.kohsuke.sorcerer</groupId>
             <artifactId>sorcerer-javac</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <version>1.8</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/../lib/tools.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

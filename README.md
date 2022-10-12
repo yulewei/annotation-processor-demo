@@ -1,12 +1,9 @@
-
 JSR-199 Java 编译器 API 和 JSR-269 注解处理器 API 试验代码
 
-----
-
-编译示例项目：
+编译示例代码：
 
 ``` bash
-mvn clean install -DskipTests
+mvn clean package
 ```
 
 运行 javac API 示例代码：
@@ -20,9 +17,16 @@ mvn exec:java -pl javac-demo -Dexec.mainClass="Hello2"
 
 运行注解处理器示例代码：
 
+运行 `BuilderProcessor` 对应的单元测试：
+
 ``` bash
-mvn exec:java -pl processor-demo -Dexec.mainClass="com.example.MyLombokMain"
-mvn exec:java -pl processor-demo -Dexec.mainClass="com.example.CompilerMain"
+mvn test -pl processor-demo -Dtest="BuilderProcessorTest"
+```
+
+运行 `MyLombokProcessor` 对应的单元测试：
+
+``` bash
+mvn test -pl processor-demo -Dtest="MyLombokTest"
 ```
 
 ---

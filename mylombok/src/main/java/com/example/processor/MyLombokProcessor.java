@@ -30,7 +30,7 @@ import java.util.Set;
  * @author yulewei
  */
 @AutoService(Processor.class)
-@SupportedAnnotationTypes("*")
+@SupportedAnnotationTypes({"com.example.Data", "com.example.Slf4j"})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class MyLombokProcessor extends AbstractProcessor {
     private static final Logger log = LoggerFactory.getLogger(MyLombokProcessor.class);
@@ -80,7 +80,7 @@ public class MyLombokProcessor extends AbstractProcessor {
             // 代码生成
             handleSlf4jLog(classDecl);
         }
-        return true;
+        return false;
     }
 
     private void handleData(JCTree.JCClassDecl classDecl) {

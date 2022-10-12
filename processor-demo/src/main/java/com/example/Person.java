@@ -1,12 +1,13 @@
 package com.example;
 
 import com.example.Data;
-import com.example.Slf4j;
+import com.example.Builder;
 
 /**
  * @author yulewei
  */
 @Data
+@Builder
 public class Person {
 
     private String name;

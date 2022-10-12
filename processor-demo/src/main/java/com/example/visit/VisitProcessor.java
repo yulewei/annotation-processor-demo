@@ -9,7 +9,6 @@ import java.util.Set;
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes("*")
 public class VisitProcessor extends AbstractProcessor {
-
     private MyScanner scanner;
 
     @Override
@@ -18,6 +17,7 @@ public class VisitProcessor extends AbstractProcessor {
         this.scanner = new MyScanner();
     }
 
+    @Override
     public boolean process(Set<? extends TypeElement> types, RoundEnvironment environment) {
         if (!environment.processingOver()) {
             for (Element element : environment.getRootElements()) {
@@ -27,7 +27,7 @@ public class VisitProcessor extends AbstractProcessor {
         return true;
     }
 
-    public class MyScanner extends ElementScanner7<Void, Void> {
+    public static class MyScanner extends ElementScanner7<Void, Void> {
 
         public Void visitType(TypeElement element, Void p) {
             System.out.println("类 " + element.getKind() + ": " + element.getSimpleName());
