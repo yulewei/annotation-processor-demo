@@ -32,9 +32,6 @@ import java.util.stream.Collectors;
 /**
  * {@code @Builder} 注解处理器。使用 javapoet 库生成 XxxBuilder 类
  *
- * https://github.com/square/javapoet/issues/197
- * https://www.baeldung.com/java-annotation-processing-builder
- *
  * @author yulewei
  */
 @AutoService(Processor.class)
