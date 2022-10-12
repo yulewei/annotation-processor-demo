@@ -6,6 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 类似 Lombok 的 {@code @Builder}
+ *
+ * https://projectlombok.org/features/Builder
+ *
  * @author yulewei
  */
 @Target(ElementType.TYPE)
