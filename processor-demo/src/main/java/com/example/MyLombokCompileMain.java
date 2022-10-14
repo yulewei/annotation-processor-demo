@@ -8,6 +8,7 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import java.util.Arrays;
 public class MyLombokCompileMain {
 
     public static void main(String[] args) throws IOException {
-        JavaCompiler compiler = JavacTool.create();
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         MyLombokProcessor processor = new MyLombokProcessor();
 

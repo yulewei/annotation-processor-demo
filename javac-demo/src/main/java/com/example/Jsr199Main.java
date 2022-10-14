@@ -1,13 +1,15 @@
 package com.example;
 
-import com.sun.tools.javac.api.JavacTool;
-
-import javax.tools.*;
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * @author yulewei
@@ -15,7 +17,7 @@ import java.util.Collections;
 public class Jsr199Main {
 
     public static void main(String[] args) throws URISyntaxException, IOException {
-        JavaCompiler compiler = JavacTool.create();
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
