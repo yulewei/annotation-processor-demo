@@ -35,7 +35,6 @@ import java.util.Set;
 public class MyLombokProcessor extends AbstractProcessor {
     private static final Logger log = LoggerFactory.getLogger(MyLombokProcessor.class);
 
-    private JavacProcessingEnvironment env;
     private Trees trees;
     private TreeMaker maker;
     private Names names;
@@ -44,7 +43,7 @@ public class MyLombokProcessor extends AbstractProcessor {
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
         this.trees = Trees.instance(processingEnv);
-        this.env = (JavacProcessingEnvironment) processingEnv;
+        JavacProcessingEnvironment env = (JavacProcessingEnvironment) processingEnv;
         this.maker = TreeMaker.instance(env.getContext());
         this.names = Names.instance(env.getContext());
     }
@@ -80,7 +79,7 @@ public class MyLombokProcessor extends AbstractProcessor {
             // 代码生成
             handleSlf4jLog(classDecl);
         }
-        return false;
+        return true;
     }
 
     private void handleData(JCTree.JCClassDecl classDecl) {
