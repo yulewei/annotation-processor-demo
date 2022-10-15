@@ -1,7 +1,6 @@
 package com.example;
 
 import com.example.processor.MyLombokProcessor;
-import com.sun.tools.javac.api.JavacTool;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
