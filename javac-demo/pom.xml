@@ -19,10 +19,5 @@
             <scope>system</scope>
             <systemPath>${java.home}/../lib/tools.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>org.kohsuke.sorcerer</groupId>
-            <artifactId>sorcerer-javac</artifactId>
-            <version>0.11</version>
-        </dependency>
     </dependencies>
 </project>

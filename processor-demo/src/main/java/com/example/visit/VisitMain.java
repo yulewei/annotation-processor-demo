@@ -1,11 +1,12 @@
 package com.example.visit;
 
+import com.sun.tools.javac.api.JavacTool;
+
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,7 +15,7 @@ import java.util.Arrays;
 public class VisitMain {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        JavaCompiler compiler = JavacTool.create();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         VisitProcessor processor = new VisitProcessor();
 
