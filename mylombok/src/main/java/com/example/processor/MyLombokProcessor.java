@@ -1,14 +1,18 @@
 package com.example.processor;
 
 import com.example.Data;
+import com.example.Getter;
+import com.example.Setter;
 import com.example.Slf4j;
 import com.google.auto.service.AutoService;
-import com.sun.source.util.Trees;
+import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.code.Flags;
+import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
+import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
@@ -24,28 +28,29 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import java.util.Set;
 
 /**
  * @author yulewei
  */
 @AutoService(Processor.class)
-@SupportedAnnotationTypes({"com.example.Data", "com.example.Slf4j"})
+@SupportedAnnotationTypes({"com.example.Getter", "com.example.Setter", "com.example.Data", "com.example.Slf4j"})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class MyLombokProcessor extends AbstractProcessor {
     private static final Logger log = LoggerFactory.getLogger(MyLombokProcessor.class);
 
-    private Trees trees;
+    private JavacTrees trees;
     private TreeMaker maker;
     private Names names;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        this.trees = Trees.instance(processingEnv);
-        JavacProcessingEnvironment env = (JavacProcessingEnvironment) processingEnv;
-        this.maker = TreeMaker.instance(env.getContext());
-        this.names = Names.instance(env.getContext());
+        Context context = ((JavacProcessingEnvironment) processingEnv).getContext();
+        this.trees = JavacTrees.instance(context);
+        this.maker = TreeMaker.instance(context);
+        this.names = Names.instance(context);
     }
 
     @Override
@@ -54,14 +59,54 @@ public class MyLombokProcessor extends AbstractProcessor {
             return true;
         }
 
+        // @Getter 注解，代码生成
+        for (Element element : roundEnv.getElementsAnnotatedWith(Getter.class)) {
+            if (element instanceof TypeElement) {
+                TypeElement typeElement = (TypeElement) element;
+                JCTree.JCClassDecl classDecl = trees.getTree(typeElement);
+                // 代码生成
+                log.debug("@Getter, process class: {}", classDecl.getSimpleName().toString());
+                handleGetter(classDecl);
+            } else if (element instanceof VariableElement) {
+                VariableElement variableElement = (VariableElement) element;
+                JCTree.JCVariableDecl variableDecl = (JCTree.JCVariableDecl) trees.getTree(variableElement);
+                if (variableDecl.sym != null && variableDecl.sym.owner instanceof Symbol.ClassSymbol) {
+                    // 代码生成
+                    JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) trees.getTree(variableDecl.sym.owner);
+                    log.debug("@Getter, process filed: {}.{}", classDecl.getSimpleName(), variableDecl.getName().toString());
+                    handleGetter(classDecl, variableDecl);
+                }
+            }
+        }
+
+        // @Setter 注解，代码生成
+        for (Element element : roundEnv.getElementsAnnotatedWith(Setter.class)) {
+            if (element instanceof TypeElement) {
+                TypeElement typeElement = (TypeElement) element;
+                JCTree.JCClassDecl classDecl = trees.getTree(typeElement);
+                // 代码生成
+                log.debug("@Setter, process class: {}", classDecl.getSimpleName().toString());
+                handleSetter(classDecl);
+            } else if (element instanceof VariableElement) {
+                VariableElement variableElement = (VariableElement) element;
+                JCTree.JCVariableDecl variableDecl = (JCTree.JCVariableDecl) trees.getTree(variableElement);
+                if (variableDecl.sym != null && variableDecl.sym.owner instanceof Symbol.ClassSymbol) {
+                    // 代码生成
+                    JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) trees.getTree(variableDecl.sym.owner);
+                    log.debug("@Setter, process filed: {}.{}", classDecl.getSimpleName(), variableDecl.getName().toString());
+                    handleSetter(classDecl, variableDecl);
+                }
+            }
+        }
+
         // @Data 注解，代码生成
         for (Element element : roundEnv.getElementsAnnotatedWith(Data.class)) {
             if (!(element instanceof TypeElement)) {
                 continue;
             }
 
-            TypeElement classElement = (TypeElement) element;
-            JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) trees.getTree(classElement);
+            TypeElement typeElement = (TypeElement) element;
+            JCTree.JCClassDecl classDecl = trees.getTree(typeElement);
             log.debug("@Data, process class: {}", classDecl.getSimpleName().toString());
             // 代码生成
             handleData(classDecl);
@@ -73,8 +118,8 @@ public class MyLombokProcessor extends AbstractProcessor {
                 continue;
             }
 
-            TypeElement classElement = (TypeElement) element;
-            JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) trees.getTree(classElement);
+            TypeElement typeElement = (TypeElement) element;
+            JCTree.JCClassDecl classDecl = trees.getTree(typeElement);
             log.debug("@Slf4j, process class: {}", classDecl.getSimpleName().toString());
             // 代码生成
             handleSlf4jLog(classDecl);
@@ -82,12 +127,12 @@ public class MyLombokProcessor extends AbstractProcessor {
         return true;
     }
 
-    private void handleData(JCTree.JCClassDecl classDecl) {
+    private void handleGetter(JCTree.JCClassDecl classDecl) {
         List<JCTree> methodDecls = List.nil();
         for (JCTree tree : classDecl.defs) {
             if (tree instanceof JCTree.JCVariableDecl) {
                 JCTree.JCVariableDecl fieldDecl = (JCTree.JCVariableDecl) tree;
-                log.debug("field: {}", fieldDecl);
+                log.debug("field: {}", fieldDecl.getName());
 
                 // 创建 getter 方法
                 String methodGetterName = Utils.toGetterName(fieldDecl);
@@ -98,6 +143,28 @@ public class MyLombokProcessor extends AbstractProcessor {
                 } else {
                     log.debug("methodExists: {}", methodGetterName);
                 }
+            }
+        }
+        classDecl.defs = classDecl.defs.appendList(methodDecls);
+    }
+
+    private void handleGetter(JCTree.JCClassDecl classDecl, JCTree.JCVariableDecl fieldDecl) {
+        String methodGetterName = Utils.toGetterName(fieldDecl);
+        if (!Utils.methodExists(methodGetterName, classDecl)) {
+            JCTree.JCMethodDecl methodGetter = this.createGetter(fieldDecl);
+            log.debug("createGetter: {}", methodGetter);
+            classDecl.defs = classDecl.defs.append(methodGetter);
+        } else {
+            log.debug("methodExists: {}", methodGetterName);
+        }
+    }
+
+    private void handleSetter(JCTree.JCClassDecl classDecl) {
+        List<JCTree> methodDecls = List.nil();
+        for (JCTree tree : classDecl.defs) {
+            if (tree instanceof JCTree.JCVariableDecl) {
+                JCTree.JCVariableDecl fieldDecl = (JCTree.JCVariableDecl) tree;
+                log.debug("field: {}", fieldDecl.getName());
 
                 // 创建 setter 方法
                 String methodSetterName = Utils.toSetterName(fieldDecl);
@@ -111,6 +178,22 @@ public class MyLombokProcessor extends AbstractProcessor {
             }
         }
         classDecl.defs = classDecl.defs.appendList(methodDecls);
+    }
+
+    private void handleSetter(JCTree.JCClassDecl classDecl, JCTree.JCVariableDecl fieldDecl) {
+        String methodSetterName = Utils.toSetterName(fieldDecl);
+        if (!Utils.methodExists(methodSetterName, classDecl)) {
+            JCTree.JCMethodDecl methodSetter = this.createSetter(fieldDecl);
+            log.debug("createSetter: {}", methodSetter);
+            classDecl.defs = classDecl.defs.append(methodSetter);
+        } else {
+            log.debug("methodExists: {}", methodSetterName);
+        }
+    }
+
+    private void handleData(JCTree.JCClassDecl classDecl) {
+        this.handleGetter(classDecl);
+        this.handleSetter(classDecl);
     }
 
     private void handleSlf4jLog(JCTree.JCClassDecl classDecl) {

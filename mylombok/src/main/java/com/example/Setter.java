@@ -6,13 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 类似 Lombok 的 {@code @Data}
+ * 类似 Lombok 的 {@code @Setter}
  *
- * https://projectlombok.org/features/Data
+ * https://projectlombok.org/features/Setter
  *
  * @author yulewei
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.SOURCE)
-public @interface Data {
+public @interface Setter {
 }

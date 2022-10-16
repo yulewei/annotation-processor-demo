@@ -1,20 +1,21 @@
 package com.example;
 
-import com.example.Data;
-import com.example.Builder;
-
 /**
  * @author yulewei
  */
-@Data
+//@Data
 @Builder
 public class Person {
 
+    @Getter
+    @Setter
     private String name;
 
+    @Getter
+    @Setter
     private int age;
 
-    public String getName() {
-        return this.name;
+    public int getAge() {
+        return this.age;
     }
 }

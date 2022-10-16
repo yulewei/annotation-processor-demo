@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
  * @author yulewei
  */
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.SOURCE)
 public @interface Slf4j {
 }
