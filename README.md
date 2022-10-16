@@ -15,7 +15,7 @@ mvn exec:java -pl javac-demo -Dexec.mainClass="com.example.Jsr199Main"
 mvn exec:java -pl javac-demo -Dexec.mainClass="Hello2"
 ```
 
-运行遍历 Java
+运行扫描 Java
 抽象语法树的注解处理器 [VisitProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/visit/VisitProcessor.java)
 ，编译 `src/main/resources/Example.java` 文件：：
 

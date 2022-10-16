@@ -49,7 +49,7 @@ public class VisitProcessor extends AbstractProcessor {
         }
 
         for (Element element : roundEnv.getRootElements()) {
-            // 遍历 class 直接声明的 fields, methods, constructors, and member types
+            // 打印 class 直接声明的 fields, methods, constructors, and member types
             System.out.format("=== %s 类，Element#getEnclosedElements ===\n", element.getSimpleName());
             TypeElement typeElement = (TypeElement) element;
             for (Element e : typeElement.getEnclosedElements()) {
@@ -58,20 +58,20 @@ public class VisitProcessor extends AbstractProcessor {
         }
 
         for (Element element : roundEnv.getRootElements()) {
-            // 使用 ElementScanner 遍历语法树
+            // 使用 ElementScanner 扫描语法树
             System.out.format("=== %s 类，ElementScanner ===\n", element.getSimpleName());
             elementScanner.scan(element);
         }
 
         for (Element element : roundEnv.getRootElements()) {
-            // 使用 TreeScanner 遍历语法树
+            // 使用 TreeScanner 扫描语法树
             System.out.format("=== %s 类，TreeScanner ===\n", element.getSimpleName());
             TreePath path = trees.getPath(element);
             treeScanner.scan(path, null);
         }
 
         for (Element element : roundEnv.getRootElements()) {
-            // 使用 com.sun.tools.javac.tree 包下 TreeScanner 遍历语法树
+            // 使用 com.sun.tools.javac.tree 包下 TreeScanner 扫描语法树
             System.out.format("=== %s 类，JCTreeScanner ===\n", element.getSimpleName());
             JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) trees.getTree(element);
             jcTreeScanner.scan(classDecl);
