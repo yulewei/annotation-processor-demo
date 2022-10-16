@@ -23,9 +23,10 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.ElementScanner7;
+import javax.lang.model.util.ElementScanner8;
 import java.util.Set;
 
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes("*")
 public class VisitProcessor extends AbstractProcessor {
     private Trees trees;
@@ -79,7 +80,7 @@ public class VisitProcessor extends AbstractProcessor {
         return false;
     }
 
-    public static class MyElementScanner extends ElementScanner7<Void, Void> {
+    public static class MyElementScanner extends ElementScanner8<Void, Void> {
 
         @Override
         public Void visitType(TypeElement element, Void p) {
