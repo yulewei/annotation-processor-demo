@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.filer.BuilderProcessor;
 
+import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
@@ -27,6 +28,10 @@ public class BuilderCompileMain {
         task.setProcessors(Arrays.asList(processor));
         task.call();
 
+        for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
+            System.out.format("%s:%d\n%s\n", diagnostic.getSource().getName(), diagnostic.getLineNumber(),
+                    diagnostic.getMessage(null));
+        }
         manager.close();
     }
 }

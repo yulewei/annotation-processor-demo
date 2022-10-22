@@ -7,11 +7,10 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
+import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -29,6 +28,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static javax.tools.Diagnostic.Kind.NOTE;
+
 /**
  * {@code @Builder} 注解处理器。使用 javapoet 库生成 XxxBuilder 类
  *
@@ -38,16 +39,17 @@ import java.util.stream.Collectors;
 @SupportedAnnotationTypes("com.example.filer.Builder")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class BuilderProcessor extends AbstractProcessor {
-    private static final Logger log = LoggerFactory.getLogger(BuilderProcessor.class);
 
     private Filer filer;
     private Elements elements;
+    private Messager messager;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        filer = processingEnv.getFiler();
-        elements = processingEnv.getElementUtils();
+        this.filer = processingEnv.getFiler();
+        this.elements = processingEnv.getElementUtils();
+        this.messager = processingEnv.getMessager();
     }
 
     @Override
@@ -57,7 +59,7 @@ public class BuilderProcessor extends AbstractProcessor {
                 continue;
             }
 
-            log.debug("@Builder, process class: {}", element.getSimpleName().toString());
+            messager.printMessage(NOTE, "@Builder, process class: " + element.getSimpleName(), element);
 
             TypeElement classElement = (TypeElement) element;
             List<VariableElement> fieldElementList = new ArrayList<>();

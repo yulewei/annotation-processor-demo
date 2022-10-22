@@ -38,7 +38,7 @@ mvn exec:java -pl processor-demo -Dexec.mainClass="com.example.visit.VisitMain"
 mvn test -pl processor-demo -Dtest="BuilderProcessorTest"
 ```
 
-运行 @Data、@Slf4j
+运行 @Data、@Getter、@Setter、@Slf4j 等
 注解处理器 [MyLombokProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/mylombok/src/main/java/com/example/processor/MyLombokProcessor.java)
 对应的单元测试：
 

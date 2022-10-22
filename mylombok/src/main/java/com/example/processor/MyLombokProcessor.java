@@ -16,14 +16,14 @@ import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedOptions;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -31,18 +31,22 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import java.util.Set;
 
+import static javax.tools.Diagnostic.Kind.NOTE;
+
 /**
  * @author yulewei
  */
 @AutoService(Processor.class)
 @SupportedAnnotationTypes({"com.example.Getter", "com.example.Setter", "com.example.Data", "com.example.Slf4j"})
+@SupportedOptions({"lombok.verbose"})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class MyLombokProcessor extends AbstractProcessor {
-    private static final Logger log = LoggerFactory.getLogger(MyLombokProcessor.class);
 
     private JavacTrees trees;
     private TreeMaker maker;
     private Names names;
+    private Messager messager;
+    private boolean verbose;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
@@ -51,6 +55,8 @@ public class MyLombokProcessor extends AbstractProcessor {
         this.trees = JavacTrees.instance(context);
         this.maker = TreeMaker.instance(context);
         this.names = Names.instance(context);
+        this.messager = processingEnv.getMessager();
+        this.verbose = Boolean.parseBoolean(processingEnv.getOptions().get("lombok.verbose"));
     }
 
     @Override
@@ -63,17 +69,21 @@ public class MyLombokProcessor extends AbstractProcessor {
         for (Element element : roundEnv.getElementsAnnotatedWith(Getter.class)) {
             if (element instanceof TypeElement) {
                 TypeElement typeElement = (TypeElement) element;
-                JCTree.JCClassDecl classDecl = trees.getTree(typeElement);
+                if (verbose) {
+                    messager.printMessage(NOTE, "@Getter, process class: " + element.getSimpleName(), element);
+                }
                 // 代码生成
-                log.debug("@Getter, process class: {}", classDecl.getSimpleName().toString());
+                JCTree.JCClassDecl classDecl = trees.getTree(typeElement);
                 handleGetter(classDecl);
             } else if (element instanceof VariableElement) {
                 VariableElement variableElement = (VariableElement) element;
                 JCTree.JCVariableDecl variableDecl = (JCTree.JCVariableDecl) trees.getTree(variableElement);
                 if (variableDecl.sym != null && variableDecl.sym.owner instanceof Symbol.ClassSymbol) {
+                    if (verbose) {
+                        messager.printMessage(NOTE, "@Getter, process filed: " + element.getSimpleName(), element);
+                    }
                     // 代码生成
                     JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) trees.getTree(variableDecl.sym.owner);
-                    log.debug("@Getter, process filed: {}.{}", classDecl.getSimpleName(), variableDecl.getName().toString());
                     handleGetter(classDecl, variableDecl);
                 }
             }
@@ -82,18 +92,22 @@ public class MyLombokProcessor extends AbstractProcessor {
         // @Setter 注解，代码生成
         for (Element element : roundEnv.getElementsAnnotatedWith(Setter.class)) {
             if (element instanceof TypeElement) {
+                if (verbose) {
+                    messager.printMessage(NOTE, "@Setter, process class: " + element.getSimpleName(), element);
+                }
+                // 代码生成
                 TypeElement typeElement = (TypeElement) element;
                 JCTree.JCClassDecl classDecl = trees.getTree(typeElement);
-                // 代码生成
-                log.debug("@Setter, process class: {}", classDecl.getSimpleName().toString());
                 handleSetter(classDecl);
             } else if (element instanceof VariableElement) {
                 VariableElement variableElement = (VariableElement) element;
                 JCTree.JCVariableDecl variableDecl = (JCTree.JCVariableDecl) trees.getTree(variableElement);
                 if (variableDecl.sym != null && variableDecl.sym.owner instanceof Symbol.ClassSymbol) {
+                    if (verbose) {
+                        messager.printMessage(NOTE, "@Setter, process filed: " + element.getSimpleName(), element);
+                    }
                     // 代码生成
                     JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) trees.getTree(variableDecl.sym.owner);
-                    log.debug("@Setter, process filed: {}.{}", classDecl.getSimpleName(), variableDecl.getName().toString());
                     handleSetter(classDecl, variableDecl);
                 }
             }
@@ -104,11 +118,12 @@ public class MyLombokProcessor extends AbstractProcessor {
             if (!(element instanceof TypeElement)) {
                 continue;
             }
-
+            if (verbose) {
+                messager.printMessage(NOTE, "@Data, process class: " + element.getSimpleName(), element);
+            }
+            // 代码生成
             TypeElement typeElement = (TypeElement) element;
             JCTree.JCClassDecl classDecl = trees.getTree(typeElement);
-            log.debug("@Data, process class: {}", classDecl.getSimpleName().toString());
-            // 代码生成
             handleData(classDecl);
         }
 
@@ -117,11 +132,12 @@ public class MyLombokProcessor extends AbstractProcessor {
             if (!(element instanceof TypeElement)) {
                 continue;
             }
-
+            if (verbose) {
+                messager.printMessage(NOTE, "@Slf4j, process class: " + element.getSimpleName(), element);
+            }
+            // 代码生成
             TypeElement typeElement = (TypeElement) element;
             JCTree.JCClassDecl classDecl = trees.getTree(typeElement);
-            log.debug("@Slf4j, process class: {}", classDecl.getSimpleName().toString());
-            // 代码生成
             handleSlf4jLog(classDecl);
         }
         return true;
@@ -131,17 +147,19 @@ public class MyLombokProcessor extends AbstractProcessor {
         List<JCTree> methodDecls = List.nil();
         for (JCTree tree : classDecl.defs) {
             if (tree instanceof JCTree.JCVariableDecl) {
-                JCTree.JCVariableDecl fieldDecl = (JCTree.JCVariableDecl) tree;
-                log.debug("field: {}", fieldDecl.getName());
-
                 // 创建 getter 方法
+                JCTree.JCVariableDecl fieldDecl = (JCTree.JCVariableDecl) tree;
                 String methodGetterName = Utils.toGetterName(fieldDecl);
                 if (!Utils.methodExists(methodGetterName, classDecl)) {
                     JCTree.JCMethodDecl methodGetter = this.createGetter(fieldDecl);
-                    log.debug("createGetter: {}", methodGetter);
                     methodDecls = methodDecls.append(methodGetter);
+                    if (verbose) {
+                        messager.printMessage(NOTE, "createGetter: " + methodGetter, fieldDecl.sym);
+                    }
                 } else {
-                    log.debug("methodExists: {}", methodGetterName);
+                    if (verbose) {
+                        messager.printMessage(NOTE, "methodExists: " + methodGetterName, fieldDecl.sym);
+                    }
                 }
             }
         }
@@ -152,10 +170,14 @@ public class MyLombokProcessor extends AbstractProcessor {
         String methodGetterName = Utils.toGetterName(fieldDecl);
         if (!Utils.methodExists(methodGetterName, classDecl)) {
             JCTree.JCMethodDecl methodGetter = this.createGetter(fieldDecl);
-            log.debug("createGetter: {}", methodGetter);
             classDecl.defs = classDecl.defs.append(methodGetter);
+            if (verbose) {
+                messager.printMessage(NOTE, "createGetter: " + methodGetter, fieldDecl.sym);
+            }
         } else {
-            log.debug("methodExists: {}", methodGetterName);
+            if (verbose) {
+                messager.printMessage(NOTE, "methodExists: " + methodGetterName, fieldDecl.sym);
+            }
         }
     }
 
@@ -163,17 +185,19 @@ public class MyLombokProcessor extends AbstractProcessor {
         List<JCTree> methodDecls = List.nil();
         for (JCTree tree : classDecl.defs) {
             if (tree instanceof JCTree.JCVariableDecl) {
-                JCTree.JCVariableDecl fieldDecl = (JCTree.JCVariableDecl) tree;
-                log.debug("field: {}", fieldDecl.getName());
-
                 // 创建 setter 方法
+                JCTree.JCVariableDecl fieldDecl = (JCTree.JCVariableDecl) tree;
                 String methodSetterName = Utils.toSetterName(fieldDecl);
                 if (!Utils.methodExists(methodSetterName, classDecl)) {
                     JCTree.JCMethodDecl methodSetter = this.createSetter(fieldDecl);
-                    log.debug("createSetter: {}", methodSetter);
                     methodDecls = methodDecls.append(methodSetter);
+                    if (verbose) {
+                        messager.printMessage(NOTE, "createSetter: " + methodSetter, fieldDecl.sym);
+                    }
                 } else {
-                    log.debug("methodExists: {}", methodSetterName);
+                    if (verbose) {
+                        messager.printMessage(NOTE, "methodExists: " + methodSetterName, fieldDecl.sym);
+                    }
                 }
             }
         }
@@ -184,10 +208,14 @@ public class MyLombokProcessor extends AbstractProcessor {
         String methodSetterName = Utils.toSetterName(fieldDecl);
         if (!Utils.methodExists(methodSetterName, classDecl)) {
             JCTree.JCMethodDecl methodSetter = this.createSetter(fieldDecl);
-            log.debug("createSetter: {}", methodSetter);
             classDecl.defs = classDecl.defs.append(methodSetter);
+            if (verbose) {
+                messager.printMessage(NOTE, "createSetter: " + methodSetterName, fieldDecl.sym);
+            }
         } else {
-            log.debug("methodExists: {}", methodSetterName);
+            if (verbose) {
+                messager.printMessage(NOTE, "methodExists: " + methodSetterName, fieldDecl.sym);
+            }
         }
     }
 
@@ -208,8 +236,9 @@ public class MyLombokProcessor extends AbstractProcessor {
                 maker.Modifiers(Flags.PRIVATE | Flags.FINAL | Flags.STATIC),
                 names.fromString("log"), loggerType, factoryMethodCall);
 
-        log.debug("log field: {}", fieldDecl);
-
+        if (verbose) {
+            messager.printMessage(NOTE, "log field: " + fieldDecl, classDecl.sym);
+        }
         classDecl.defs = classDecl.defs.prepend(fieldDecl);
     }
 

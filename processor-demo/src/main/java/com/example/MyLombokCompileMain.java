@@ -29,15 +29,13 @@ public class MyLombokCompileMain {
 
         JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics,
                 Arrays.asList("-verbose", "-cp", "mylombok/target/mylombok-0.0.1-SNAPSHOT.jar",
-                        "-d", "processor-demo/target/classes"), null, compilationUnits);
+                        "-d", "processor-demo/target/classes", "-Alombok.verbose=true"), null, compilationUnits);
         task.setProcessors(Arrays.asList(processor));
         task.call();
 
         for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-            System.out.format("Error on line %d in %s\n%s\n",
-                    diagnostic.getLineNumber(), diagnostic.getSource().toUri(), diagnostic.getMessage(null));
+            System.out.format("%s:%d\n%s\n", diagnostic.getSource().getName(), diagnostic.getLineNumber(), diagnostic.getMessage(null));
         }
-
         fileManager.close();
     }
 }

@@ -3,16 +3,13 @@ package com.example;
 /**
  * @author yulewei
  */
-//@Data
-@Builder
+@Data
 public class Person {
 
     @Getter
     @Setter
     private String name;
 
-    @Getter
-    @Setter
     private int age;
 
     public int getAge() {
