@@ -4,7 +4,7 @@ public class MakerExample {
 
     @PlusOne
     public String func(int x) {
-        return x;
+        return "hello";
     }
 
     public static void main(String[] args) {
