@@ -28,8 +28,8 @@ public class MyLombokCompileMain {
         Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(file));
 
         JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics,
-                Arrays.asList("-verbose", "-cp", "mylombok/target/mylombok-0.0.1-SNAPSHOT.jar",
-                        "-d", "processor-demo/target/classes", "-Alombok.verbose=true"), null, compilationUnits);
+                Arrays.asList("-processorpath", "mylombok/target/mylombok-0.0.1-SNAPSHOT.jar", "-Alombok.verbose=true",
+                        "-d", "processor-demo/target/classes", "-verbose"), null, compilationUnits);
         task.setProcessors(Arrays.asList(processor));
         task.call();
 
