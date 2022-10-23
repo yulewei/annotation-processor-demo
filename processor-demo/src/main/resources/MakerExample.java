@@ -3,7 +3,7 @@ import com.example.maker.PlusOne;
 public class MakerExample {
 
     @PlusOne
-    public int func(int x) {
+    public String func(int x) {
         return x;
     }
 

@@ -11,6 +11,7 @@ import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -19,7 +20,11 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeKind;
+import javax.tools.Diagnostic;
 import java.util.Set;
+
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes("com.example.maker.PlusOne")
@@ -27,6 +32,7 @@ public class MakerProcessor extends AbstractProcessor {
     private JavacTrees trees;
     private TreeMaker maker;
     private Names names;
+    private Messager messager;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
@@ -35,6 +41,7 @@ public class MakerProcessor extends AbstractProcessor {
         this.trees = JavacTrees.instance(context);
         this.maker = TreeMaker.instance(context);
         this.names = Names.instance(context);
+        this.messager = processingEnv.getMessager();
     }
 
     @Override
@@ -61,7 +68,18 @@ public class MakerProcessor extends AbstractProcessor {
      * </pre>
      */
     private void modifyMethod(JCTree.JCMethodDecl methodDecl) {
-        Name x = methodDecl.params.head.name;
+        JCTree.JCVariableDecl param = methodDecl.params.head;
+        if (!(param.vartype instanceof JCTree.JCPrimitiveTypeTree)) {
+            messager.printMessage(ERROR, "方法参数必须为 int 类型", methodDecl.sym);
+            return;
+        }
+        JCTree.JCPrimitiveTypeTree vartype = (JCTree.JCPrimitiveTypeTree) param.vartype;
+        if (!vartype.getPrimitiveTypeKind().equals(TypeKind.INT)) {
+            messager.printMessage(ERROR, "方法参数必须为 int 类型", methodDecl.sym);
+            return;
+        }
+
+        Name x = param.name;
         Name y = names.fromString("y");
         // x + 1
         JCTree.JCBinary binary = maker.Binary(JCTree.Tag.PLUS, maker.Ident(x), maker.Literal(TypeTag.INT, 1));
@@ -71,6 +89,7 @@ public class MakerProcessor extends AbstractProcessor {
         JCTree.JCReturn ret = maker.Return(maker.Ident(y));
         // 修改方法内部实现
         methodDecl.body.stats = List.of(decl, ret);
+        methodDecl.restype = maker.TypeIdent(TypeTag.INT);
         System.out.println(methodDecl);
     }
 }
