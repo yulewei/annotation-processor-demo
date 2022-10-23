@@ -146,6 +146,9 @@ public class MyLombokProcessor extends AbstractProcessor {
         return true;
     }
 
+    /**
+     * 处理 @Getter 注解，类的全部字段生成 getter 方法
+     */
     private void handleGetter(JCTree.JCClassDecl classDecl) {
         List<JCTree> methodDecls = List.nil();
         for (JCTree tree : classDecl.defs) {
@@ -169,6 +172,9 @@ public class MyLombokProcessor extends AbstractProcessor {
         classDecl.defs = classDecl.defs.appendList(methodDecls);
     }
 
+    /**
+     * 处理 @Getter 注解，类的某个字段生成 getter 方法
+     */
     private void handleGetter(JCTree.JCClassDecl classDecl, JCTree.JCVariableDecl fieldDecl) {
         String methodGetterName = Utils.toGetterName(fieldDecl);
         if (!Utils.methodExists(methodGetterName, classDecl)) {
@@ -184,6 +190,9 @@ public class MyLombokProcessor extends AbstractProcessor {
         }
     }
 
+    /**
+     * 处理 @Setter 注解，类的全部字段生成 setter 方法
+     */
     private void handleSetter(JCTree.JCClassDecl classDecl) {
         List<JCTree> methodDecls = List.nil();
         for (JCTree tree : classDecl.defs) {
@@ -207,6 +216,9 @@ public class MyLombokProcessor extends AbstractProcessor {
         classDecl.defs = classDecl.defs.appendList(methodDecls);
     }
 
+    /**
+     * 处理 @Setter 注解，类的某个字段生成 setter 方法
+     */
     private void handleSetter(JCTree.JCClassDecl classDecl, JCTree.JCVariableDecl fieldDecl) {
         String methodSetterName = Utils.toSetterName(fieldDecl);
         if (!Utils.methodExists(methodSetterName, classDecl)) {
@@ -222,13 +234,22 @@ public class MyLombokProcessor extends AbstractProcessor {
         }
     }
 
+    /**
+     * 处理 @Data 注解
+     */
     private void handleData(JCTree.JCClassDecl classDecl) {
         this.handleGetter(classDecl);
         this.handleSetter(classDecl);
     }
 
+    /**
+     * 处理 @Slf4j 注解。生成的代码示例：
+     *
+     * <pre>
+     * private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Xxx.class)
+     * </pre>
+     */
     private void handleSlf4jLog(JCTree.JCClassDecl classDecl) {
-        // private static final <loggerType> log = <factoryMethod>(<parameter>);
         JCTree.JCExpression loggerType = Utils.chainDotsString(maker, names, "org.slf4j.Logger");
         JCTree.JCExpression factoryMethod = Utils.chainDotsString(maker, names, "org.slf4j.LoggerFactory.getLogger");
 
@@ -245,6 +266,15 @@ public class MyLombokProcessor extends AbstractProcessor {
         classDecl.defs = classDecl.defs.prepend(fieldDecl);
     }
 
+    /**
+     * 生成 getter 方法。假设字段为 `name`，生成的 getter 代码示例：
+     *
+     * <pre>
+     * public String getName() {
+     *   return name;
+     * }
+     * </pre>
+     */
     private JCTree.JCMethodDecl createGetter(JCTree.JCVariableDecl field) {
         JCTree.JCStatement returnStatement = maker.Return(maker.Ident(field));
         JCTree.JCBlock methodBody = maker.Block(0, List.of(returnStatement));
@@ -255,6 +285,15 @@ public class MyLombokProcessor extends AbstractProcessor {
                 List.nil(), List.nil(), List.nil(), methodBody, null);
     }
 
+    /**
+     * 生成 setter 方法。假设字段为 `name`，生成的 getter 代码示例：
+     *
+     * <pre>
+     * public void setName(String name) {
+     *   this.name = name;
+     * }
+     * </pre>
+     */
     private JCTree.JCMethodDecl createSetter(JCTree.JCVariableDecl field) {
         JCTree.JCFieldAccess thisX = maker.Select(maker.Ident(names.fromString("this")), field.name);
         JCTree.JCAssign assign = maker.Assign(thisX, maker.Ident(field.name));
