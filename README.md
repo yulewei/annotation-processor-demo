@@ -16,18 +16,28 @@ mvn exec:java -pl javac-demo -Dexec.mainClass="Hello2"
 ```
 
 运行扫描 Java
-抽象语法树的注解处理器 [VisitProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/visit/VisitProcessor.java)
-，编译 `src/main/resources/Example.java` 文件：：
+抽象语法树的注解处理器 [VisitorProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/visit/VisitProcessor.java)
+，编译 `src/main/resources/VisitorExample.java` 文件：：
 
 ``` bash
 cd processor-demo
-javac -processorpath target/classes -processor com.example.visit.VisitProcessor -proc:only src/main/resources/Example.java
+javac -processorpath target/classes -processor com.example.visitor.VisitorProcessor -proc:only src/main/resources/VisitorExample.java
 ```
 
 或者通用 javac API 运行 `VisitProcessor` 注解处理器：
 
 ```
 mvn exec:java -pl processor-demo -Dexec.mainClass="com.example.visit.VisitMain"
+```
+
+运行修改 Java
+抽象语法树的注解处理器 [MakerProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/maker/MakerProcessor.java)
+，编译 `src/main/resources/MakerExample.java` 文件并运行 `MakerExample`：
+
+``` bash
+cd processor-demo
+javac -cp target/classes -processor com.example.maker.MakerProcessor -d target/classes src/main/resources/MakerExample.java
+java -cp target/classes MakerExample
 ```
 
 运行 @Builder

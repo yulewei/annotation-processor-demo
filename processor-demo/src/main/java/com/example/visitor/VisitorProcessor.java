@@ -1,4 +1,4 @@
-package com.example.visit;
+package com.example.visitor;
 
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.MethodTree;
@@ -27,7 +27,7 @@ import java.util.Set;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes("*")
-public class VisitProcessor extends AbstractProcessor {
+public class VisitorProcessor extends AbstractProcessor {
     private Trees trees;
     private MyElementScanner elementScanner;
     private MyTreeScanner treeScanner;

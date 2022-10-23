@@ -1,4 +1,4 @@
-public class Example {
+public class VisitorExample {
 
     private String foo = "bar";
 
