@@ -25,6 +25,9 @@ import java.util.Set;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 
+/**
+ * {@code @PlusOne} 注解处理器。修改 @PlusOne 标注的方法的内部实现，改造为 `x + 1`
+ */
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes("com.example.maker.PlusOne")
 public class PlusProcessor extends AbstractProcessor {

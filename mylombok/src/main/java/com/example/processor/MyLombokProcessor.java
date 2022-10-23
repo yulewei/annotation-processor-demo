@@ -35,6 +35,8 @@ import static com.example.processor.MyLombokProcessor.VERBOSE;
 import static javax.tools.Diagnostic.Kind.NOTE;
 
 /**
+ * 处理类似 Lombok 注解的注册处理器。支持 @Data、@Getter、@Setter、@Slf4j 注解
+ *
  * @author yulewei
  */
 @AutoService(Processor.class)

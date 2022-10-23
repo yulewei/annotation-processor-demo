@@ -25,6 +25,9 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.ElementScanner8;
 import java.util.Set;
 
+/**
+ * 扫描语法树
+ */
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes("*")
 public class VisitorProcessor extends AbstractProcessor {
