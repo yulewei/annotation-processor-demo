@@ -14,12 +14,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 
-public class MakerMain {
+public class PlusMain {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
         JavaCompiler compiler = JavacTool.create();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
-        MakerProcessor processor = new MakerProcessor();
+        PlusProcessor processor = new PlusProcessor();
 
         StandardJavaFileManager manager = compiler.getStandardFileManager(diagnostics, null, null);
         File file = new File(VisitorMain.class.getResource("/MakerExample.java").toURI());

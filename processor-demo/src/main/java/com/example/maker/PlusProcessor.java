@@ -21,14 +21,13 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
-import javax.tools.Diagnostic;
 import java.util.Set;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes("com.example.maker.PlusOne")
-public class MakerProcessor extends AbstractProcessor {
+public class PlusProcessor extends AbstractProcessor {
     private JavacTrees trees;
     private TreeMaker maker;
     private Names names;

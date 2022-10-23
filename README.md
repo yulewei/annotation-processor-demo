@@ -31,13 +31,13 @@ mvn exec:java -pl processor-demo -Dexec.mainClass="com.example.visit.VisitMain"
 ```
 
 运行修改 Java
-抽象语法树的注解处理器 [MakerProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/maker/MakerProcessor.java)
-，编译 `src/main/resources/MakerExample.java` 文件并运行 `MakerExample`：
+抽象语法树的注解处理器 [PlusProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/maker/PlusProcessor.java)
+，编译 `src/main/resources/PlusExample.java` 文件并运行 `PlusExample`：
 
 ``` bash
 cd processor-demo
-javac -cp target/classes -processor com.example.maker.MakerProcessor -d target/classes src/main/resources/MakerExample.java
-java -cp target/classes MakerExample
+javac -cp target/classes -processor com.example.maker.PlusProcessor -d target/classes src/main/resources/PlusExample.java
+java -cp target/classes PlusExample 42
 ```
 
 运行 @Builder
