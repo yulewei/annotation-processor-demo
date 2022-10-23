@@ -31,6 +31,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import java.util.Set;
 
+import static com.example.processor.MyLombokProcessor.VERBOSE;
 import static javax.tools.Diagnostic.Kind.NOTE;
 
 /**
@@ -38,9 +39,11 @@ import static javax.tools.Diagnostic.Kind.NOTE;
  */
 @AutoService(Processor.class)
 @SupportedAnnotationTypes({"com.example.Getter", "com.example.Setter", "com.example.Data", "com.example.Slf4j"})
-@SupportedOptions({"lombok.verbose"})
+@SupportedOptions({VERBOSE})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class MyLombokProcessor extends AbstractProcessor {
+
+    protected static final String VERBOSE = "lombok.verbose";
 
     private JavacTrees trees;
     private TreeMaker maker;
@@ -56,7 +59,7 @@ public class MyLombokProcessor extends AbstractProcessor {
         this.maker = TreeMaker.instance(context);
         this.names = Names.instance(context);
         this.messager = processingEnv.getMessager();
-        this.verbose = Boolean.parseBoolean(processingEnv.getOptions().get("lombok.verbose"));
+        this.verbose = Boolean.parseBoolean(processingEnv.getOptions().get(VERBOSE));
     }
 
     @Override
