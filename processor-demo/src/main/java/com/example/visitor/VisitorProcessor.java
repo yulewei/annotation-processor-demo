@@ -47,7 +47,7 @@ public class VisitorProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> types, RoundEnvironment roundEnv) {
         if (roundEnv.processingOver()) {
-            return true;
+            return false;
         }
 
         for (Element element : roundEnv.getRootElements()) {
