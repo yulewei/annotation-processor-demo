@@ -55,7 +55,7 @@ public class PlusProcessor extends AbstractProcessor {
         for (Element element : roundEnv.getElementsAnnotatedWith(PlusOne.class)) {
             if (element.getKind().equals(ElementKind.METHOD)) {
                 JCTree.JCMethodDecl methodDecl = (JCTree.JCMethodDecl) trees.getTree(element);
-                modifyMethod(methodDecl);
+                modifyToPlusOneMethod(methodDecl);
             }
         }
         return false;
@@ -69,7 +69,7 @@ public class PlusProcessor extends AbstractProcessor {
      * return y;
      * </pre>
      */
-    private void modifyMethod(JCTree.JCMethodDecl methodDecl) {
+    private void modifyToPlusOneMethod(JCTree.JCMethodDecl methodDecl) {
         JCTree.JCVariableDecl param = methodDecl.params.head;
         if (!(param.vartype instanceof JCTree.JCPrimitiveTypeTree)) {
             messager.printMessage(ERROR, "方法参数必须为 int 类型", methodDecl.sym);
