@@ -18,7 +18,7 @@ java -cp javac-demo/target/classes Hello2
 ```
 
 运行扫描 Java
-抽象语法树的注解处理器 [VisitorProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/visit/VisitProcessor.java)
+抽象语法树的注解处理器 [VisitorProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/visitor/VisitorProcessor.java)
 ，编译 `src/main/resources/VisitorExample.java` 文件：：
 
 ``` bash

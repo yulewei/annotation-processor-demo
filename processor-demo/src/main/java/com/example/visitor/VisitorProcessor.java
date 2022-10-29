@@ -60,7 +60,7 @@ public class VisitorProcessor extends AbstractProcessor {
         }
 
         for (Element element : roundEnv.getRootElements()) {
-            // 使用 ElementScanner 扫描语法树
+            // 使用 ElementScanner 扫描 Element 符号
             System.out.format("=== %s 类，ElementScanner ===\n", element.getSimpleName());
             elementScanner.scan(element);
         }
