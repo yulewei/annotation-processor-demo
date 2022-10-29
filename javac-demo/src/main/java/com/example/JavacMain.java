@@ -9,6 +9,7 @@ public class JavacMain {
 
     public static void main(String[] args) {
         Main compiler = new Main("javac");
-        compiler.compile(new String[]{"javac-demo/src/main/resources/Hello1.java", "-d", "javac-demo/target/classes"});
+        compiler.compile(new String[]{"javac-demo/src/main/resources/Greeting1.java", "-d",
+                "javac-demo/target/classes"});
     }
 }

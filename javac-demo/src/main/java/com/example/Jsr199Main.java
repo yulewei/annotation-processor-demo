@@ -23,7 +23,7 @@ public class Jsr199Main {
         if (args.length >= 1) {
             file = new File(args[0]);
         } else {
-            file = new File(Jsr199Main.class.getResource("/Hello2.java").toURI());
+            file = new File(Jsr199Main.class.getResource("/Greeting2.java").toURI());
         }
 
         System.out.println("开始编译文件 " + file.getAbsolutePath());
