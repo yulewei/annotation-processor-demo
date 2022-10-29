@@ -40,7 +40,7 @@ public class ResolveTest {
 
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
 
-        File file = new File(Jsr199Main.class.getResource("/CantResolve.java").toURI());
+        File file = new File(ResolveTest.class.getResource("/CantResolve.java").toURI());
         Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(file));
 
         compiler.getTask(null, fileManager, diagnostics, Arrays.asList("-d", "target/classes"), null, compilationUnits).call();

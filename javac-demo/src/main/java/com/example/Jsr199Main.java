@@ -19,12 +19,20 @@ import java.util.Arrays;
 public class Jsr199Main {
 
     public static void main(String[] args) throws URISyntaxException, IOException {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        File file;
+        if (args.length >= 1) {
+            file = new File(args[0]);
+        } else {
+            file = new File(Jsr199Main.class.getResource("/Hello2.java").toURI());
+        }
+
+        System.out.println("开始编译文件 " + file.getAbsolutePath());
+
+        JavaCompiler compiler = JavacTool.create();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
 
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
 
-        File file = new File(Jsr199Main.class.getResource("/Hello2.java").toURI());
         Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(file));
 
         compiler.getTask(null, fileManager, diagnostics, Arrays.asList("-d", "javac-demo/target/classes"), null, compilationUnits).call();

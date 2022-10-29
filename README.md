@@ -9,10 +9,12 @@ mvn clean package
 运行 javac API 示例代码：
 
 ``` bash
+# 使用内部编译器 API 编译 Hello1.java 文件 
 mvn exec:java -pl javac-demo -Dexec.mainClass="com.example.JavacMain"
-mvn exec:java -pl javac-demo -Dexec.mainClass="Hello1"
-mvn exec:java -pl javac-demo -Dexec.mainClass="com.example.Jsr199Main"
-mvn exec:java -pl javac-demo -Dexec.mainClass="Hello2"
+java -cp javac-demo/target/classes Hello1
+# 使用 JSR-199 编译器 API 编译 Hello2.java 文件 
+mvn exec:java -pl javac-demo -Dexec.mainClass="com.example.Jsr199Main" -Dexec.args="javac-demo/src/main/resources/Hello2.java"
+java -cp javac-demo/target/classes Hello2
 ```
 
 运行扫描 Java
