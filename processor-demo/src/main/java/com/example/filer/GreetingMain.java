@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 
-@Generated(value = "", date = "")
 public class GreetingMain {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
