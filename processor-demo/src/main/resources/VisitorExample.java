@@ -9,9 +9,5 @@ public class VisitorExample {
 
     public static class InnerExample {
         private int innerFoo = 42;
-
-        public int innerFunc(int x) {
-            return x + 1;
-        }
     }
 }

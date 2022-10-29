@@ -18,7 +18,6 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
@@ -85,24 +84,22 @@ public class VisitorProcessor extends AbstractProcessor {
     public static class MyElementScanner extends ElementScanner8<Void, Void> {
 
         @Override
-        public Void visitType(TypeElement element, Void p) {
-            System.out.println("类 " + element.getKind() + ": " + element.getSimpleName());
-            return super.visitType(element, p);
+        public Void visitType(TypeElement e, Void p) {
+            System.out.println(e.getKind() + ": " + e.getSimpleName());
+            return super.visitType(e, p);
         }
 
         @Override
-        public Void visitExecutable(ExecutableElement element, Void p) {
-            Symbol.MethodSymbol symbol = (Symbol.MethodSymbol) element;
-            System.out.println("方法 " + symbol.getKind() + ": " + symbol.owner.getSimpleName() + "." + symbol.name);
-            return super.visitExecutable(element, p);
+        public Void visitExecutable(ExecutableElement e, Void p) {
+            Symbol.MethodSymbol symbol = (Symbol.MethodSymbol) e;
+            System.out.println(e.getKind() + ": " + symbol.owner.getSimpleName() + "." + e.getSimpleName());
+            return super.visitExecutable(e, p);
         }
 
         @Override
-        public Void visitVariable(VariableElement element, Void p) {
-            if (element.getEnclosingElement().getKind() == ElementKind.CLASS) {
-                System.out.println("字段 " + element.getKind() + ": " + element.getSimpleName());
-            }
-            return super.visitVariable(element, p);
+        public Void visitVariable(VariableElement e, Void p) {
+            System.out.println(e.getKind() + ": " + e.getSimpleName());
+            return super.visitVariable(e, p);
         }
     }
 
@@ -110,22 +107,20 @@ public class VisitorProcessor extends AbstractProcessor {
 
         @Override
         public Tree visitClass(ClassTree node, Void p) {
-            System.out.println("类 " + node.getKind() + ": " + node.getSimpleName());
+            System.out.println(node.getKind() + ": " + node.getSimpleName());
             return super.visitClass(node, p);
         }
 
         @Override
         public Tree visitMethod(MethodTree node, Void p) {
             Symbol owner = ((JCTree.JCMethodDecl) node).sym.owner;
-            System.out.println("方法 " + node.getKind() + ": " + owner.getSimpleName() + "." + node.getName());
+            System.out.println(node.getKind() + ": " + owner.getSimpleName() + "." + node.getName());
             return super.visitMethod(node, p);
         }
 
         @Override
         public Tree visitVariable(VariableTree node, Void p) {
-            if (this.getCurrentPath().getParentPath().getLeaf() instanceof ClassTree) {
-                System.out.println("字段 " + node.getKind() + ": " + node.getName());
-            }
+            System.out.println(node.getKind() + ": " + node.getName());
             return super.visitVariable(node, p);
         }
     }
@@ -133,21 +128,19 @@ public class VisitorProcessor extends AbstractProcessor {
     public static class MyJCTreeScanner extends TreeScanner {
         @Override
         public void visitClassDef(JCTree.JCClassDecl that) {
-            System.out.println("类 " + that.getKind() + ": " + that.getSimpleName());
+            System.out.println(that.getKind() + ": " + that.getSimpleName());
             super.visitClassDef(that);
         }
 
         @Override
         public void visitMethodDef(JCTree.JCMethodDecl that) {
-            System.out.println("方法 " + that.getKind() + ": " + that.sym.owner.getSimpleName() + "." + that.getName());
+            System.out.println(that.getKind() + ": " + that.sym.owner.getSimpleName() + "." + that.getName());
             super.visitMethodDef(that);
         }
 
         @Override
         public void visitVarDef(JCTree.JCVariableDecl that) {
-            if (that.sym != null && that.sym.owner instanceof Symbol.ClassSymbol) {
-                System.out.println("字段 " + that.getKind() + ": " + that.getName());
-            }
+            System.out.println(that.getKind() + ": " + that.getName());
             super.visitVarDef(that);
         }
     }

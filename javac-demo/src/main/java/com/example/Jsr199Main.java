@@ -1,5 +1,7 @@
 package com.example;
 
+import com.sun.tools.javac.api.JavacTool;
+
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
@@ -28,8 +30,8 @@ public class Jsr199Main {
         compiler.getTask(null, fileManager, diagnostics, Arrays.asList("-d", "javac-demo/target/classes"), null, compilationUnits).call();
 
         for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
-            System.out.format("Error on line %d in %s\n%s\n",
-                    diagnostic.getLineNumber(), diagnostic.getSource().toUri(), diagnostic.getMessage(null));
+            System.out.format("%s:%d\n%s\n", diagnostic.getSource().getName(), diagnostic.getLineNumber(),
+                    diagnostic.getMessage(null));
         }
 
         fileManager.close();
