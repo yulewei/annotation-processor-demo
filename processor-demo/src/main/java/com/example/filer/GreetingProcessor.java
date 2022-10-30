@@ -21,6 +21,8 @@ import java.util.Set;
 import static com.example.filer.GreetingProcessor.CLASSNAME;
 
 /**
+ * 自动生成 Greeting 类文件
+ *
  * @author yulewei
  */
 @SupportedAnnotationTypes("*")

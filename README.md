@@ -6,7 +6,7 @@ JSR-199 Java 编译器 API 和 JSR-269 注解处理器 API 试验代码
 mvn clean package
 ```
 
-执行 javac API 示例代码：
+运行 javac API 示例代码：
 
 ``` bash
 # 使用内部编译器 API 编译 Greeting1.java 文件 
@@ -17,38 +17,51 @@ mvn exec:java -pl javac-demo -Dexec.mainClass="com.example.Jsr199Main" -Dexec.ar
 java -cp javac-demo/target/classes Greeting2
 ```
 
-执行扫描 Java
+运行扫描 Java
 抽象语法树的注解处理器 [VisitorProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/visitor/VisitorProcessor.java)
-，编译 `src/main/resources/VisitorExample.java` 文件：：
+，编译 `src/main/resources/VisitorExample.java` 文件：
 
 ``` bash
 cd processor-demo
 javac -processorpath target/classes -processor com.example.visitor.VisitorProcessor -proc:only src/main/resources/VisitorExample.java
 ```
 
-或者通用 javac API 运行 `VisitProcessor` 注解处理器：
-
-```
-mvn exec:java -pl processor-demo -Dexec.mainClass="com.example.visit.VisitMain"
-```
-
-执行修改 Java
+运行修改 Java
 抽象语法树的注解处理器 [PlusProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/maker/PlusProcessor.java)
-，编译 `src/main/resources/PlusExample.java` 文件并运行 `PlusExample`，单元测试：
+对应的单元测试，编译 `src/main/resources/PlusExample.java` 文件并运行 `PlusExample`：
 
 ``` bash
 mvn test -pl processor-demo -Dtest="PlusProcessorTest"
 ```
 
-或者直接使用 javac 和 java 命令执行：
+或者直接使用 javac 和 java 命令运行：
 
 ``` bash
 cd processor-demo
+# 使用 PlusProcessor 注解处理器编译 PlusExample 类
 javac -cp target/classes -processor com.example.maker.PlusProcessor -d target/classes src/main/resources/PlusExample.java
+# 运行 PlusProcessor 注解处理器处理过的 PlusExample 类
 java -cp target/classes PlusExample 42
 ```
 
-执行 @Builder
+运行注解处理器 [GreetingProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/filer/GreetingProcessor.java)
+对应的单元测试，自动生成 Greeting 类文件：
+
+``` bash
+mvn test -pl processor-demo -Dtest="GreetingProcessorTest"
+```
+
+或者直接使用 javac 和 java 命令运行：
+
+``` bash
+cd processor-demo
+# 使用 GreetingProcessor 注解处理器生成 GeneratedGreeting 类
+javac -processorpath target/classes -processor com.example.filer.GreetingProcessor -Agreeting.className=GeneratedGreeting -d target/classes src/main/resources/Greeting1.java
+# 运行 GreetingProcessor 注解处理器生成的 GeneratedGreeting 类
+java -cp target/classes GeneratedGreeting
+```
+
+运行 @Builder
 注解处理器 [BuilderProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/mylombok/src/main/java/com/example/filer/BuilderProcessor.java)
 对应的单元测试：
 
@@ -56,7 +69,7 @@ java -cp target/classes PlusExample 42
 mvn test -pl processor-demo -Dtest="BuilderProcessorTest"
 ```
 
-执行 @Data、@Getter、@Setter、@Slf4j 等
+运行 @Data、@Getter、@Setter、@Slf4j 等
 注解处理器 [MyLombokProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/mylombok/src/main/java/com/example/processor/MyLombokProcessor.java)
 对应的单元测试：
 
