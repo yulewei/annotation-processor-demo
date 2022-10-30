@@ -16,7 +16,11 @@ import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -55,7 +59,7 @@ public class GreetingProcessor extends AbstractProcessor {
         }
         try {
             generated = generateGreeting();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -63,9 +67,9 @@ public class GreetingProcessor extends AbstractProcessor {
         return false;
     }
 
-    private boolean generateGreeting() throws IOException {
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("Greeting.tpl");
-        String greetingTpl = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+    private boolean generateGreeting() throws Exception {
+        byte[] bytes = Files.readAllBytes(Paths.get(this.getClass().getResource("/Greeting.tpl").toURI()));
+        String greetingTpl = new String(bytes, StandardCharsets.UTF_8);
         String greetingSource = String.format(greetingTpl, LocalDateTime.now(), className);
         JavaFileObject fileObject = filer.createSourceFile(className);
         try (PrintWriter writer = new PrintWriter(fileObject.openWriter())) {

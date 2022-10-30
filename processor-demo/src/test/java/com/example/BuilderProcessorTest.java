@@ -6,6 +6,7 @@ import com.example.filer.GreetingProcessor;
 import com.sun.tools.javac.api.JavacTool;
 import org.junit.Test;
 
+import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -51,6 +52,11 @@ public class BuilderProcessorTest {
         JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, options, null, sources);
         task.setProcessors(Arrays.asList(processor));
         task.call();
+
+        for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
+            System.out.format("%s:%d\n%s\n", diagnostic.getSource().getName(), diagnostic.getLineNumber(),
+                    diagnostic.getMessage(null));
+        }
 
         clazz = Utils.loadClassForName(generatedClassName);
         assertNotNull(clazz);

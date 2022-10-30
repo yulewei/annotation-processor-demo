@@ -4,6 +4,7 @@ import com.example.filer.GreetingProcessor;
 import com.sun.tools.javac.api.JavacTool;
 import org.junit.Test;
 
+import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;

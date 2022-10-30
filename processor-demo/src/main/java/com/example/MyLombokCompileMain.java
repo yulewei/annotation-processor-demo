@@ -11,6 +11,7 @@ import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author yulewei
@@ -27,9 +28,8 @@ public class MyLombokCompileMain {
         File file = new File("processor-demo/src/main/java/com/example/Person.java");
         Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(file));
 
-        JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics,
-                Arrays.asList("-processorpath", "mylombok/target/mylombok-0.0.1-SNAPSHOT.jar", "-Alombok.verbose=true",
-                        "-d", "processor-demo/target/classes", "-verbose"), null, compilationUnits);
+        List<String> options = Arrays.asList("-Alombok.verbose=true", "-d", "processor-demo/target/classes");
+        JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
         task.setProcessors(Arrays.asList(processor));
         task.call();
 

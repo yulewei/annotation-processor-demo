@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 public class MyLombokTest {
 
     @Test
-    public void test_MyLombok() {
+    public void testMyLombok() {
         Person person = new Person();
         person.setName("Bill");
         person.setAge(42);
