@@ -57,6 +57,9 @@ public class BuilderProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        if (roundEnv.processingOver()) {
+            return true;
+        }
         for (Element element : roundEnv.getElementsAnnotatedWith(Builder.class)) {
             if (!(element instanceof TypeElement)) {
                 continue;
