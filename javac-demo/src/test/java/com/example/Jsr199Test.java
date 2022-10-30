@@ -23,13 +23,13 @@ public class Jsr199Test {
     @Test
     public void testJavac() throws Exception {
         new File("target/classes/Greeting1.class").delete();
-        Class<?> clazz = loadClassForName("Greeting1");
+        Class<?> clazz = Utils.loadClassForName("Greeting1");
         assertNull(clazz);
 
         Main compiler = new Main("javac");
         compiler.compile(new String[]{"src/main/resources/Greeting1.java", "-d", "target/classes"});
 
-        clazz = loadClassForName("Greeting1");
+        clazz = Utils.loadClassForName("Greeting1");
         assertNotNull(clazz);
 
         Method method = clazz.getDeclaredMethod("main", String[].class);
@@ -39,7 +39,7 @@ public class Jsr199Test {
     @Test
     public void testJsr199() throws Exception {
         new File("target/classes/Greeting2.class").delete();
-        Class<?> clazz = loadClassForName("Greeting2");
+        Class<?> clazz = Utils.loadClassForName("Greeting2");
         assertNull(clazz);
 
         File file = new File(this.getClass().getResource("/Greeting2.java").toURI());
@@ -49,19 +49,11 @@ public class Jsr199Test {
         Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(file));
         compiler.getTask(null, fileManager, diagnostics, Arrays.asList("-d", "target/classes"), null, compilationUnits).call();
 
-        clazz = loadClassForName("Greeting2");
+        clazz = Utils.loadClassForName("Greeting2");
         assertNotNull(clazz);
 
         Method method = clazz.getDeclaredMethod("main", String[].class);
         assertNotNull(method);
     }
 
-    private Class<?> loadClassForName(String className) {
-        try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            // e.printStackTrace();
-        }
-        return null;
-    }
 }

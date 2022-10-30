@@ -1,7 +1,5 @@
 package com.example.filer;
 
-import org.apache.commons.io.IOUtils;
-
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -13,11 +11,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
