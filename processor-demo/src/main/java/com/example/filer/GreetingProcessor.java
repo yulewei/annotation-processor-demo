@@ -54,7 +54,7 @@ public class GreetingProcessor extends AbstractProcessor {
             return false;
         }
         try {
-            generated = generateGreeting();
+            generated = generateGreeting(className);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -63,7 +63,7 @@ public class GreetingProcessor extends AbstractProcessor {
         return false;
     }
 
-    private boolean generateGreeting() throws Exception {
+    private boolean generateGreeting(String className) throws Exception {
         byte[] bytes = Files.readAllBytes(Paths.get(this.getClass().getResource("/Greeting.tpl").toURI()));
         String greetingTpl = new String(bytes, StandardCharsets.UTF_8);
         String greetingSource = String.format(greetingTpl, LocalDateTime.now(), className);
