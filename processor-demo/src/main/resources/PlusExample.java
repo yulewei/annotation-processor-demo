@@ -3,8 +3,8 @@ import com.example.maker.PlusOne;
 public class PlusExample {
 
     @PlusOne
-    public String func(int x) {
-        return "hello";
+    public int func(int x) {
+        return x * x;
     }
 
     public static void main(String[] args) {

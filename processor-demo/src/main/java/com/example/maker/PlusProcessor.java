@@ -85,7 +85,7 @@ public class PlusProcessor extends AbstractProcessor {
         JCTree.JCReturn ret = maker.Return(binary);
         // 修改方法内部实现
         methodDecl.body.stats = List.of(ret);
-        // methodDecl.restype = maker.TypeIdent(TypeTag.INT);
+        //methodDecl.restype = maker.TypeIdent(TypeTag.INT);
         System.out.println(methodDecl);
     }
 }
