@@ -86,7 +86,7 @@ public class BuilderProcessor extends AbstractProcessor {
                         .addModifiers(Modifier.PUBLIC)
                         .returns(builderClassName)
                         .addParameter(TypeName.get(field.asType()), field.getSimpleName().toString())
-                        .addStatement("obj.$L = $L;", field, field)
+                        .addStatement("obj.$L = $L", field, field)
                         .addStatement("return this")
                         .build();
             }).collect(Collectors.toList());
