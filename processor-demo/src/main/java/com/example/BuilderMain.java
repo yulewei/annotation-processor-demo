@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class BuilderCompileMain {
+public class BuilderMain {
 
     public static void main(String[] args) throws IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();

@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author yulewei
  */
-public class MyLombokCompileMain {
+public class MyLombokMain {
 
     public static void main(String[] args) throws IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
