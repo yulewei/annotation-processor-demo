@@ -1,17 +1,18 @@
 package com.example;
 
-import com.example.DogBuilder;
-import com.example.filer.BuilderProcessor;
 import com.example.filer.GreetingProcessor;
+import com.example.maker.PlusProcessor;
 import com.sun.tools.javac.api.JavacTool;
 import org.junit.Test;
 
+import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import java.io.File;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,29 +23,22 @@ import static org.junit.Assert.assertNull;
 /**
  * @author yulewei
  */
-public class BuilderProcessorTest {
+public class PlusProcessorTest {
 
     @Test
-    public void testBuilder() {
-        Dog dog = new DogBuilder().name("旺财").age(3).build();
-        assertNotNull(dog);
-        assertEquals(dog.name, "旺财");
-        assertEquals(dog.age, 3);
-    }
-
-    @Test
-    public void testBuilderProcessor() throws Exception {
-        String generatedClassName = "com.example.DogBuilder";
-        new File("target/classes/com/example/DogBuilder.class").delete();
-        Class<?> clazz = Utils.loadClassForName(generatedClassName);
+    public void testPlusProcessor() throws Exception {
+        String className = "PlusExample";
+        String resourceName = "/PlusExample.java";
+        new File(String.format("target/classes/%s.class", className)).delete();
+        Class<?> clazz = Utils.loadClassForName(className);
         assertNull(clazz);
 
         JavaCompiler compiler = JavacTool.create();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
-        BuilderProcessor processor = new BuilderProcessor();
+        PlusProcessor processor = new PlusProcessor();
 
         StandardJavaFileManager manager = compiler.getStandardFileManager(diagnostics, null, null);
-        File file = new File("src/main/java/com/example/Dog.java");
+        File file = new File(this.getClass().getResource(resourceName).toURI());
         Iterable<? extends JavaFileObject> sources = manager.getJavaFileObjectsFromFiles(Arrays.asList(file));
 
         List<String> options = Arrays.asList("-d", "target/classes");
@@ -52,10 +46,12 @@ public class BuilderProcessorTest {
         task.setProcessors(Arrays.asList(processor));
         task.call();
 
-        clazz = Utils.loadClassForName(generatedClassName);
+        clazz = Utils.loadClassForName(className);
         assertNotNull(clazz);
 
-        Method method = clazz.getDeclaredMethod("build");
+        Method method = clazz.getDeclaredMethod("func", int.class);
         assertNotNull(method);
+        int res = (int) method.invoke(clazz.newInstance(), 42);
+        assertEquals(res, 43);
     }
 }

@@ -1,7 +1,5 @@
 package com.example;
 
-import com.example.DogBuilder;
-import com.example.filer.BuilderProcessor;
 import com.example.filer.GreetingProcessor;
 import com.sun.tools.javac.api.JavacTool;
 import org.junit.Test;
@@ -15,39 +13,31 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 /**
  * @author yulewei
  */
-public class BuilderProcessorTest {
+public class GreetingProcessorTest {
 
     @Test
-    public void testBuilder() {
-        Dog dog = new DogBuilder().name("旺财").age(3).build();
-        assertNotNull(dog);
-        assertEquals(dog.name, "旺财");
-        assertEquals(dog.age, 3);
-    }
-
-    @Test
-    public void testBuilderProcessor() throws Exception {
-        String generatedClassName = "com.example.DogBuilder";
-        new File("target/classes/com/example/DogBuilder.class").delete();
+    public void testGreetingProcessor() throws Exception {
+        String generatedClassName = "GeneratedGreeting";
+        new File(String.format("target/classes/%s.class", generatedClassName)).delete();
         Class<?> clazz = Utils.loadClassForName(generatedClassName);
         assertNull(clazz);
 
         JavaCompiler compiler = JavacTool.create();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
-        BuilderProcessor processor = new BuilderProcessor();
+        GreetingProcessor processor = new GreetingProcessor();
 
         StandardJavaFileManager manager = compiler.getStandardFileManager(diagnostics, null, null);
-        File file = new File("src/main/java/com/example/Dog.java");
-        Iterable<? extends JavaFileObject> sources = manager.getJavaFileObjectsFromFiles(Arrays.asList(file));
+        File file1 = new File(this.getClass().getResource("/Greeting1.java").toURI());
+        File file2 = new File(this.getClass().getResource("/Greeting2.java").toURI());
+        Iterable<? extends JavaFileObject> sources = manager.getJavaFileObjectsFromFiles(Arrays.asList(file1, file2));
 
-        List<String> options = Arrays.asList("-d", "target/classes");
+        List<String> options = Arrays.asList("-d", "target/classes", String.format("-Agreeting.className=%s", generatedClassName));
         JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, options, null, sources);
         task.setProcessors(Arrays.asList(processor));
         task.call();
@@ -55,7 +45,7 @@ public class BuilderProcessorTest {
         clazz = Utils.loadClassForName(generatedClassName);
         assertNotNull(clazz);
 
-        Method method = clazz.getDeclaredMethod("build");
+        Method method = clazz.getDeclaredMethod("main", String[].class);
         assertNotNull(method);
     }
 }

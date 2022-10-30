@@ -12,6 +12,7 @@ import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public class BuilderCompileMain {
 
@@ -24,7 +25,8 @@ public class BuilderCompileMain {
         File file = new File("processor-demo/src/main/java/com/example/Dog.java");
         Iterable<? extends JavaFileObject> sources = manager.getJavaFileObjectsFromFiles(Arrays.asList(file));
 
-        CompilationTask task = compiler.getTask(null, manager, diagnostics, Arrays.asList("-d", "processor-demo/target/classes"), null, sources);
+        List<String> options = Arrays.asList("-d", "processor-demo/target/classes");
+        CompilationTask task = compiler.getTask(null, manager, diagnostics, options, null, sources);
         task.setProcessors(Arrays.asList(processor));
         task.call();
 
