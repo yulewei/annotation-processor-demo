@@ -65,8 +65,7 @@ public class PlusProcessor extends AbstractProcessor {
      * 修改方法内部实现，改为加 1
      *
      * <pre>
-     * int y = x + 1;
-     * return y;
+     * return x + 1;
      * </pre>
      */
     private void modifyToPlusOneMethod(JCTree.JCMethodDecl methodDecl) {
@@ -81,17 +80,12 @@ public class PlusProcessor extends AbstractProcessor {
             return;
         }
 
-        Name x = param.name;
-        Name y = names.fromString("y");
         // x + 1
-        JCTree.JCBinary binary = maker.Binary(JCTree.Tag.PLUS, maker.Ident(x), maker.Literal(TypeTag.INT, 1));
-        // int y = x + 1
-        JCTree.JCVariableDecl decl = maker.VarDef(maker.Modifiers(0), y, maker.TypeIdent(TypeTag.INT), binary);
-        // return y
-        JCTree.JCReturn ret = maker.Return(maker.Ident(y));
+        JCTree.JCBinary binary = maker.Binary(JCTree.Tag.PLUS, maker.Ident(param.name), maker.Literal(TypeTag.INT, 1));
+        JCTree.JCReturn ret = maker.Return(binary);
         // 修改方法内部实现
-        methodDecl.body.stats = List.of(decl, ret);
-        methodDecl.restype = maker.TypeIdent(TypeTag.INT);
+        methodDecl.body.stats = List.of(ret);
+        // methodDecl.restype = maker.TypeIdent(TypeTag.INT);
         System.out.println(methodDecl);
     }
 }
