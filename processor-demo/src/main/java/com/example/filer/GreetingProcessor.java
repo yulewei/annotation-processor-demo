@@ -65,11 +65,11 @@ public class GreetingProcessor extends AbstractProcessor {
 
     private boolean generateGreeting(String className) throws Exception {
         byte[] bytes = Files.readAllBytes(Paths.get(this.getClass().getResource("/Greeting.tpl").toURI()));
-        String greetingTpl = new String(bytes, StandardCharsets.UTF_8);
-        String greetingSource = String.format(greetingTpl, LocalDateTime.now(), className);
+        String greetingTemplate = new String(bytes, StandardCharsets.UTF_8);
+        String greetingSourceCode = String.format(greetingTemplate, LocalDateTime.now(), className);
         JavaFileObject fileObject = filer.createSourceFile(className);
         try (PrintWriter writer = new PrintWriter(fileObject.openWriter())) {
-            writer.println(greetingSource);
+            writer.println(greetingSourceCode);
         }
         return true;
     }
