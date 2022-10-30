@@ -1,6 +1,7 @@
 package com.example.filer;
 
 import com.google.auto.service.AutoService;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
@@ -8,6 +9,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import javax.annotation.Generated;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -23,6 +25,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -80,11 +83,18 @@ public class BuilderProcessor extends AbstractProcessor {
                         .addModifiers(Modifier.PUBLIC)
                         .returns(builderClassName)
                         .addParameter(TypeName.get(field.asType()), field.getSimpleName().toString())
-                        .addStatement(String.format("obj.%s = %s;", field, field))
+                        .addStatement("obj.$L = $L;", field, field)
                         .addStatement("return this")
                         .build();
             }).collect(Collectors.toList());
+
+            AnnotationSpec annotationSpec = AnnotationSpec.builder(Generated.class)
+                    .addMember("value", "$S", "by BuilderProcessor")
+                    .addMember("date", "$S", LocalDateTime.now())
+                    .build();
+
             TypeSpec.Builder builderClass = TypeSpec.classBuilder(builderClassName)
+                    .addAnnotation(annotationSpec)
                     .addModifiers(Modifier.PUBLIC)
                     .addField(fieldSpec)
                     .addMethods(list)
