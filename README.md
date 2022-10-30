@@ -67,7 +67,7 @@ java -cp target/classes GeneratedGreeting
 
 运行 @Builder
 注解处理器 [BuilderProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/mylombok/src/main/java/com/example/filer/BuilderProcessor.java)
-对应的单元测试：
+对应的单元测试，底层基于 [javapoet](https://github.com/square/javapoet) 库生成 XxxBuilder 类：
 
 ``` bash
 mvn test -pl processor-demo -Dtest="BuilderProcessorTest"
