@@ -21,7 +21,7 @@ java -cp javac-demo/target/classes Greeting2
 
 运行扫描 Java
 抽象语法树的注解处理器 [VisitorProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/visitor/VisitorProcessor.java)
-，编译 `src/main/resources/VisitorExample.java` 文件：
+，扫描 `src/main/resources/VisitorExample.java` 文件：
 
 ``` bash
 cd processor-demo
@@ -32,7 +32,7 @@ javac -processorpath target/classes -processor com.example.visitor.VisitorProces
 
 运行修改 Java
 抽象语法树的注解处理器 [PlusProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/maker/PlusProcessor.java)
-，编译 `src/main/resources/PlusExample.java` 文件并运行 `PlusExample`：
+，编译 `src/main/resources/PlusExample.java` 文件，并运行被 PlusProcessor 注解处理器修改过的 `PlusExample`：
 
 ``` bash
 # 运行单元测试
@@ -48,7 +48,7 @@ java -cp target/classes PlusExample 42
 # GreetingProcessor
 
 运行注解处理器 [GreetingProcessor](https://github.com/yulewei/annotation-processor-demo/blob/master/processor-demo/src/main/java/com/example/filer/GreetingProcessor.java)
-，自动生成 Greeting 类文件：
+，自动生成 Greeting 类文件，并运行注解处理器自动生成的 GeneratedGreeting 类：
 
 ``` bash
 # 运行单元测试
