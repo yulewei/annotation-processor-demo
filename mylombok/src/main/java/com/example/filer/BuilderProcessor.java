@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 import static javax.tools.Diagnostic.Kind.NOTE;
 
 /**
- * {@code @Builder} 注解处理器。使用 javapoet 库生成 XxxBuilder 类
+ * {@code @Builder} 注解处理器。基于 JavaPoet 库生成 XxxBuilder 类
  *
  * @author yulewei
  */
