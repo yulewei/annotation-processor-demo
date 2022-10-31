@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author yulewei
@@ -30,12 +31,11 @@ public class Jsr199Main {
 
         JavaCompiler compiler = JavacTool.create();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
-
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
-
         Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(file));
+        List<String> options = Arrays.asList("-d", "javac-demo/target/classes");
 
-        compiler.getTask(null, fileManager, diagnostics, Arrays.asList("-d", "javac-demo/target/classes"), null, compilationUnits).call();
+        compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits).call();
 
         for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
             System.out.format("%s:%d\n%s\n", diagnostic.getSource().getName(), diagnostic.getLineNumber(),
